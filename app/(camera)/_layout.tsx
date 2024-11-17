@@ -10,7 +10,7 @@ export default function CameraLayout() {
         <Stack.Screen
           name="image-preview"
           options={{
-            headerShown: true,
+            headerShown: false,
             title: 'Image Review',
             presentation: 'modal',
           }}
