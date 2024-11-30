@@ -1,11 +1,12 @@
-import { Switch } from "@/components/ui/switch";
 import * as Speech from "expo-speech";
-import React from "react";
-import { View } from "react-native";
 
 import { Button } from "~/components/ui/button";
+import { ENUM_LOCALE } from "@/constants";
 import { Input } from "~/components/ui/input";
+import React from "react";
+import { Switch } from "@/components/ui/switch";
 import { Text } from "~/components/ui/text";
+import { View } from "react-native";
 
 export default class App extends React.Component {
   viTextData = [
@@ -24,8 +25,8 @@ export default class App extends React.Component {
 
   state = {
     inputValue: "",
-    language: "vi", // Ngôn ngữ mặc định là tiếng Việt
-    voices: [], // Danh sách giọng nói
+    language: ENUM_LOCALE.VI, // Ngôn ngữ mặc định là tiếng Việt
+    voices: [] as any[], // Danh sách giọng nói
     isPaused: false, // Trạng thái tạm dừng
   };
 
@@ -40,13 +41,13 @@ export default class App extends React.Component {
   }
 
   // Lấy giọng đọc phù hợp với ngôn ngữ
-  getVoiceForLanguage(language) {
+  getVoiceForLanguage(language: ENUM_LOCALE) {
     const { voices } = this.state;
     return voices.find((voice) => voice.language.startsWith(language));
   }
 
   // Phương thức đọc văn bản
-  speak(text, language) {
+  speak(text: string, language: ENUM_LOCALE) {
     const voice = this.getVoiceForLanguage(language);
     const options = voice ? { voice: voice.identifier } : { language };
 
@@ -79,8 +80,8 @@ export default class App extends React.Component {
 
   // Phương thức chuyển đổi ngôn ngữ
   toggleLanguage = () => {
-    this.setState((prevState) => ({
-      language: prevState.language === "vi" ? "en" : "vi",
+    this.setState((prevState: { language: ENUM_LOCALE }) => ({
+      language: prevState.language === ENUM_LOCALE.VI ? ENUM_LOCALE.EN : ENUM_LOCALE.VI,
     }));
   };
 
@@ -105,7 +106,7 @@ export default class App extends React.Component {
               <Text>{item.content}</Text>
               <Button
                 variant="secondary"
-                onPress={() => this.speak(item.content, "vi")}
+                onPress={() => this.speak(item.content, ENUM_LOCALE.VI)}
               >
                 <Text>Speech</Text>
               </Button>
@@ -122,7 +123,7 @@ export default class App extends React.Component {
               <Text>{item.content}</Text>
               <Button
                 variant="secondary"
-                onPress={() => this.speak(item.content, "en")}
+                onPress={() => this.speak(item.content, ENUM_LOCALE.EN)}
               >
                 <Text>Speech</Text>
               </Button>
@@ -133,11 +134,11 @@ export default class App extends React.Component {
           <Text className="mb-2 text-2xl font-bold">Text to Speech</Text>
           <View className="mb-4 flex flex-row items-center justify-between">
             <Text>
-              Switch Language ({language === "vi" ? "Vietnamese" : "English"})
+              Switch Language ({language === ENUM_LOCALE.VI ? "Vietnamese" : "English"})
             </Text>
             <Switch
               onCheckedChange={this.toggleLanguage}
-              checked={language === "vi"}
+              checked={language === ENUM_LOCALE.VI}
             />
           </View>
           <Input

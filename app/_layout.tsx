@@ -1,9 +1,11 @@
 import '~/global.css';
 
-import { Slot, SplashScreen } from 'expo-router';
 import * as React from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { Slot, SplashScreen } from 'expo-router';
+
+import { CameraProvider } from '@/components/CameraProvider';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from '~/provider/ThemeProvider';
 
 export const unstable_settings = {
@@ -23,7 +25,9 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView className="flex flex-1">
       <ThemeProvider>
-        <Slot />
+        <CameraProvider>
+          <Slot />
+        </CameraProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

@@ -1,36 +1,39 @@
-import React, { useState } from "react";
 import {
-  StyleSheet,
-  Text,
+  ActivityIndicator,
+  Alert,
   SafeAreaView,
   ScrollView,
+  Text,
   View,
-  ActivityIndicator,
-  TouchableOpacity,
-  Platform,
-  Alert,
 } from "react-native";
+import React, { useState } from "react";
+
 import { Audio } from "expo-av";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Button } from "@/components/ui/button";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { GOOGLE_SPEECH_TO_TEXT_API_KEY } from "@/constants";
 import { Switch } from "@/components/ui/switch";
 
 export default function HomeScreen() {
   const [isRecording, setIsRecording] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const [recording, setRecording] = useState(null);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [transcribedSpeech, setTranscribedSpeech] = useState("");
+
   // Phương thức chuyển đổi ngôn ngữ
   const [language, setLanguage] = useState("en-US");
 
   // Hàm chuyển đổi file audio thành base64
-  const fileToBase64 = async (uri) => {
+  const fileToBase64 = async (uri: string) => {
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
       const reader = new FileReader();
       return new Promise((resolve, reject) => {
-        reader.onloadend = () => resolve(reader.result.split(",")[1]);
+        reader.onloadend = () => resolve(
+          typeof reader.result === "string"
+            ? reader.result?.split(",")[1]
+            : null);
         reader.onerror = reject;
         reader.readAsDataURL(blob);
       });
@@ -91,7 +94,7 @@ export default function HomeScreen() {
       }
 
       const base64Audio = await fileToBase64(uri);
-      if (base64Audio) {
+      if (base64Audio && typeof base64Audio === "string") {
         await transcribeSpeech(base64Audio);
       }
     } catch (error) {
@@ -104,7 +107,7 @@ export default function HomeScreen() {
   // Hàm fetch API để chuyển giọng nói thành văn bản
   const transcribeSpeech = async (
     base64Audio: string,
-    encodeing = "MP3",
+    encoding = "MP3",
     sampleRateHertz = 16000,
     languageCode = language,
     enableAutomaticPunctuation = true,
@@ -112,10 +115,10 @@ export default function HomeScreen() {
   ) => {
     try {
       const audioConfig = {
-        encoding: encodeing,
-        sampleRateHertz: sampleRateHertz,
-        languageCode: languageCode,
-        enableAutomaticPunctuation: enableAutomaticPunctuation,
+        encoding,
+        sampleRateHertz,
+        languageCode,
+        enableAutomaticPunctuation,
         model: model,
       };
 
@@ -126,7 +129,7 @@ export default function HomeScreen() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            "X-goog-api-key": "AIzaSyBCVfmt2pCpdzjGhah55_EMRtXk7se-dAg",
+            "X-goog-api-key": GOOGLE_SPEECH_TO_TEXT_API_KEY,
           },
           body: JSON.stringify({
             audio: { content: base64Audio },
@@ -147,7 +150,7 @@ export default function HomeScreen() {
         "No transcription found";
       setTranscribedSpeech(transcription);
     } catch (error) {
-      console.error("Error during transcription:", error.message || error);
+      console.error("Error during transcription:", error instanceof Error ? error.message || error : "An error occurred during transcription.");
       setTranscribedSpeech("An error occurred during transcription.");
     }
   };
@@ -188,9 +191,8 @@ export default function HomeScreen() {
 
           <View className="flex items-center justify-between">
             <Button
-              className={`bg-red-500 size-24 rounded-full placeholder:${
-                isRecording || isTranscribing ? "opacity-50" : ""
-              }`}
+              className={`bg-red-500 size-24 rounded-full placeholder:${isRecording || isTranscribing ? "opacity-50" : ""
+                }`}
               size="icon"
               onPress={isRecording ? stopRecording : startRecording}
               disabled={isTranscribing}

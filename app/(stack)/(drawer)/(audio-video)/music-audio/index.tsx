@@ -1,7 +1,7 @@
-import { Audio } from 'expo-av';
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
+import { Audio } from 'expo-av';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
 import { Trash } from '~/lib/icons/IconList';

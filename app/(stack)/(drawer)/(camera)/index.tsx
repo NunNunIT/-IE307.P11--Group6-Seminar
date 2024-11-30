@@ -1,11 +1,12 @@
-import { useFocusEffect } from '@react-navigation/native'; // Import the hook
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useState, useRef } from 'react';
-import { SafeAreaView, Text, View, Vibration } from 'react-native';
+import { Alert, AlertTitle } from '@/components/deprecated-ui/alert';
+import { AlertCircle, Aperture, SwitchCamera, Zap, ZapOff } from '~/lib/icons';
+import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import { SafeAreaView, Text, Vibration, View } from 'react-native';
+import { useRef, useState } from 'react';
 
-import { useCamera } from '~/components/CameraProvider';
 import { Button } from '~/components/ui/button';
-import { Aperture, SwitchCamera, Zap, ZapOff } from '~/lib/icons';
+import { useCamera } from '~/components/CameraProvider';
+import { useFocusEffect } from '@react-navigation/native'; // Import the hook
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -40,7 +41,13 @@ export default function App() {
 
   if (!permission) {
     // Camera permissions are still loading.
-    return <View />;
+    return (
+      <View>
+        <Alert variant="destructive" icon={AlertCircle}>
+          <AlertTitle>Can't find the permission</AlertTitle>
+        </Alert>
+      </View>
+    );
   }
 
   if (!permission.granted) {
@@ -98,13 +105,21 @@ export default function App() {
             className="absolute right-3.5 top-3.5">
             <SwitchCamera className="size-14 text-white" />
           </Button>
-          <View className="absolute inset-x-0 bottom-10 h-20">
+          <View className="absolute inset-x-0 bottom-0">
             <Button
               variant="ghost"
               size="icon"
               onPress={takePicture}
-              className="left-1/2 top-0 -translate-x-1/2 border-2 border-white">
-              <Aperture className="size-14 text-white" />
+              className="absolute left-1/2 bottom-8 -translate-x-1/2">
+              <Aperture className="text-white" size={48} />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onPress={takePicture}
+              className="absolute bottom-8 right-3.5">
+              <Aperture className="text-white" size={48} />
             </Button>
           </View>
         </CameraView>
