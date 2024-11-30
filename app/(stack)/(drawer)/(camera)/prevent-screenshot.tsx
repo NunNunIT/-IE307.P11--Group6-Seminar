@@ -1,28 +1,25 @@
-import * as ScreenCapture from 'expo-screen-capture';
-import { useCallback, useState } from 'react';
-import { Platform, View, SafeAreaView } from 'react-native';
-
 import { Alert, AlertTitle } from '~/components/deprecated-ui/alert';
-import { Button } from '~/components/ui/button';
-import { Label } from '~/components/ui/label';
-import { Switch } from '~/components/ui/switch';
+import { Platform, SafeAreaView, View } from 'react-native';
+import { allowScreenCaptureAsync, preventScreenCaptureAsync } from 'expo-screen-capture';
+import { useCallback, useState } from 'react';
+
 import { AlertCircle } from '~/lib/icons';
+import { Button } from '~/components/ui/button';
+import { Switch } from '~/components/ui/switch';
+import { Text } from '@/components/ui/text';
 
 export default function ScreenCaptureSettings() {
   const [isPreventing, setIsPreventing] = useState(false);
 
-  // Handle toggle
   const togglePreventing = useCallback(async () => {
     try {
-      if (!isPreventing) {
-        await ScreenCapture.preventScreenCaptureAsync();
-      } else {
-        await ScreenCapture.allowScreenCaptureAsync();
-      }
+      if (!isPreventing)
+        await preventScreenCaptureAsync();
+      else
+        await allowScreenCaptureAsync();
+
       setIsPreventing((prev) => !prev);
-    } catch (error: any) {
-      console.log('Toggle screen capture error:', error.message);
-    }
+    } catch { }
   }, [isPreventing]);
 
   return (
@@ -40,7 +37,7 @@ export default function ScreenCaptureSettings() {
           variant="ghost"
           className="w-full flex-row items-center justify-between rounded-lg bg-card p-4">
           <View className="flex-row items-center space-x-3">
-            <Label className="text-base font-medium">Prevent Screenshots</Label>
+            <Text className="text-base font-medium">Prevent Screenshots</Text>
           </View>
           <Switch checked={isPreventing} onCheckedChange={togglePreventing} className="ml-auto" />
         </Button>

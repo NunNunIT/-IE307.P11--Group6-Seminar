@@ -1,10 +1,11 @@
 import { Alert, AlertTitle } from '@/components/deprecated-ui/alert';
 import { AlertCircle, Aperture, GalleryThumbnails, SwitchCamera, Zap, ZapOff } from '~/lib/icons';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import { SafeAreaView, Text, Vibration, View } from 'react-native';
+import { SafeAreaView, Vibration, View } from 'react-native';
 import { useRef, useState } from 'react';
 
 import { Button } from '~/components/ui/button';
+import { Text } from '@/components/ui/text';
 import { router } from 'expo-router';
 import { useCamera } from '~/components/CameraProvider';
 import { useFocusEffect } from '@react-navigation/native'; // Import the hook
@@ -12,36 +13,25 @@ import { useFocusEffect } from '@react-navigation/native'; // Import the hook
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
-  const [isCameraVisible, setIsCameraVisible] = useState(true); // State to control camera visibility
+  const [isCameraVisible, setIsCameraVisible] = useState(true);
   const [isFlashMode, setIsFlashMode] = useState(false);
-  const { photoUri, setPhotoUri } = useCamera(); // Get the photo URI and setter
+  const { photoUri, setPhotoUri } = useCamera();
   const cameraRef = useRef<CameraView>(null);
 
-  // Use useFocusEffect to handle screen focus/unfocus
   useFocusEffect(() => {
-    // When screen is focused, show the camera
     setIsCameraVisible(true);
 
-    // Cleanup function for when screen is unfocused
     return () => {
-      setIsCameraVisible(false); // Hide the camera (unmount it)
-      // Cancel any ongoing vibration when screen is unfocused
+      setIsCameraVisible(false);
       Vibration.cancel();
     };
   });
 
-  // Vibration patterns
-  const shortVibration = () => {
-    Vibration.vibrate(100); // Short vibration for 100ms
-  };
+  const shortVibration = () => Vibration.vibrate(100);
 
-  const shutterVibration = () => {
-    // Pattern: wait 0ms -> vibrate 50ms -> wait 50ms -> vibrate 50ms
-    Vibration.vibrate([0, 50, 50, 0]);
-  };
+  const shutterVibration = () => Vibration.vibrate([0, 50, 50, 0]);
 
   if (!permission) {
-    // Camera permissions are still loading.
     return (
       <View>
         <Alert variant="destructive" icon={AlertCircle}>
@@ -52,10 +42,9 @@ export default function App() {
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <SafeAreaView className="flex flex-1">
-        <View className="flex flex-1 justify-center">
+        <View className="flex flex-1 justify-center px-8">
           <Text className="pb-10 text-center">We need your permission to show the camera</Text>
           <Button onPress={requestPermission}>
             <Text>Grant permission</Text>
@@ -67,18 +56,15 @@ export default function App() {
 
   function toggleCameraFacing() {
     setFacing((current) => (current === 'back' ? 'front' : 'back'));
-    shortVibration(); // Add feedback for camera flip
+    shortVibration();
   }
 
-  // Function to take a picture
   async function takePicture() {
     if (cameraRef.current) {
       shutterVibration();
       const photo = await cameraRef.current.takePictureAsync();
-      if (photoUri) {
-        URL.revokeObjectURL(photoUri); // Revoke the object URL
-      }
-      setPhotoUri(photo?.uri ?? null); // Save the photo URI
+      if (photoUri) URL.revokeObjectURL(photoUri);
+      setPhotoUri(photo?.uri ?? null);
     }
   }
 

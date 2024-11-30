@@ -15,7 +15,6 @@ export default function Index() {
   const screenshot = async () => {
     try {
       const localUri = await captureRef(imageRef);
-
       setPhotoUri(localUri);
     } catch (e: any) {
       console.error(e?.message);

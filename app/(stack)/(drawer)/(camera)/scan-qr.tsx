@@ -1,10 +1,10 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useState, useRef, useCallback } from 'react';
+import { CameraView, useCameraPermissions } from 'expo-camera';
 import { SafeAreaView, Text, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
 
-import { Button } from '~/components/ui/button';
 import { Aperture } from '~/lib/icons';
+import { Button } from '~/components/ui/button';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function QRScanner() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -16,9 +16,7 @@ export default function QRScanner() {
   useFocusEffect(
     useCallback(() => {
       setIsCameraVisible(true);
-      return () => {
-        setIsCameraVisible(false);
-      };
+      return () => setIsCameraVisible(false);
     }, [])
   );
 
@@ -27,16 +25,12 @@ export default function QRScanner() {
       if (isScanning) {
         setScannedData(data);
         setIsScanning(false);
-        // Handle the scanned QR code data here
-        console.log(`Scanned QR code with data: ${data}`);
       }
     },
     [isScanning]
   );
 
-  if (!permission) {
-    return <View />;
-  }
+  if (!permission) return <View />;
 
   if (!permission.granted) {
     return (
@@ -63,7 +57,6 @@ export default function QRScanner() {
           style={{ flex: 1 }}
           ref={cameraRef}
           barcodeScannerSettings={{
-            // Enable QR code scanning
             barcodeTypes: ['qr'],
           }}
           onBarcodeScanned={isScanning ? handleBarCodeScanned : undefined}>
@@ -81,7 +74,6 @@ export default function QRScanner() {
         </CameraView>
       )}
 
-      {/* Bottom Controls */}
       <View className="absolute inset-x-0 bottom-32">
         {scannedData && (
           <Button
@@ -93,7 +85,6 @@ export default function QRScanner() {
         )}
       </View>
 
-      {/* Scanned Data Display */}
       {scannedData && (
         <View className="absolute inset-x-0 bottom-64 px-4">
           <View className="rounded-lg bg-white/20 p-4 backdrop-blur-sm">
