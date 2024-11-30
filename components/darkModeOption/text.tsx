@@ -1,15 +1,16 @@
-import { useColorScheme } from 'nativewind';
-import { Pressable, Text } from 'react-native';
+import { Pressable } from 'react-native';
+import { Text } from '../ui/text';
+import { useColorScheme } from '@/lib/useColorScheme';
 
 const DarkModeText = () => {
-  const { colorScheme, toggleColorScheme } = useColorScheme();
+  const { isDarkColorScheme, toggleColorScheme } = useColorScheme();
 
   return (
     <Pressable
       onPress={toggleColorScheme}
-      className="mr-2 h-6 flex-1 items-center justify-center bg-transparent">
-      <Text selectable={false} className="text-black dark:text-white">
-        {colorScheme === 'dark' ? 'Dark Mode!🌙' : 'Light Mode!🌞'}
+      className="flex items-center justify-end bg-transparent">
+      <Text selectable={false} className="text-right">
+        {isDarkColorScheme ? 'Dark Mode! 🌙' : 'Light Mode! 🌞'}
       </Text>
     </Pressable>
   );
