@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { useState } from "react";
+import { ScrollView, View } from "react-native";
 
-import { Audio } from 'expo-av';
-import { Button } from '~/components/ui/button';
-import { Text } from '~/components/ui/text';
-import { Trash } from '~/lib/icons/IconList';
+import { Audio } from "expo-av";
+import { Button } from "~/components/ui/button";
+import { Text } from "~/components/ui/text";
+import { Trash } from "~/lib/icons/IconList";
 
 export default function App() {
   const [currentPlayingSound, setCurrentPlayingSound] = useState(null);
@@ -15,22 +15,22 @@ export default function App() {
   // Danh sách các đoạn âm thanh
   const audioList = [
     {
-      title: 'Play mp3 sound from Local',
+      title: "Play mp3 sound from Local",
       isRequire: true,
-      url: require('~/assets/sound/music.mp3'),
+      url: require("~/assets/sound/music.mp3"),
     },
     {
-      title: 'Play mp3 sound from remote URL',
-      url: 'https://raw.githubusercontent.com/zmxv/react-native-sound-demo/master/advertising.mp3',
+      title: "Play mp3 sound from remote URL",
+      url: "https://raw.githubusercontent.com/zmxv/react-native-sound-demo/master/advertising.mp3",
     },
     {
-      title: 'Play aac sound from Local',
+      title: "Play aac sound from Local",
       isRequire: true,
-      url: require('~/assets/sound/pew2.aac'),
+      url: require("~/assets/sound/pew2.aac"),
     },
     {
-      title: 'Play aac sound from remote URL',
-      url: 'https://raw.githubusercontent.com/zmxv/react-native-sound-demo/master/pew2.aac',
+      title: "Play aac sound from remote URL",
+      url: "https://raw.githubusercontent.com/zmxv/react-native-sound-demo/master/pew2.aac",
     },
   ];
 
@@ -53,20 +53,23 @@ export default function App() {
         }
 
         // Phát bài mới
-        const { sound } = await Audio.Sound.createAsync(isRequire ? url : { uri: url });
+        const { sound } = await Audio.Sound.createAsync(
+          isRequire ? url : { uri: url }
+        );
         setCurrentPlayingSound(sound);
         setPlayingTrack(index); // Cập nhật trạng thái bài đang phát
         await sound.playAsync();
       }
     } catch (error) {
-      console.error('Error toggling sound:', error);
+      console.error("Error toggling sound:", error);
     }
   };
 
+  // Bắt đầu ghi âm
   async function startRecording() {
     try {
       const perm = await Audio.requestPermissionsAsync();
-      if (perm.status === 'granted') {
+      if (perm.status === "granted") {
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true,
@@ -79,6 +82,7 @@ export default function App() {
     } catch (err) {}
   }
 
+  // Dừng ghi âm
   async function stopRecording() {
     setRecording(undefined);
 
@@ -94,6 +98,7 @@ export default function App() {
     setRecordings(allRecordings);
   }
 
+  // Chuyển đổi thời gian (miligiây) thành định dạng phút:giây (ví dụ: 2:05).
   function getDurationFormatted(milliseconds) {
     const minutes = milliseconds / 1000 / 60;
     const seconds = Math.round((minutes - Math.floor(minutes)) * 60);
@@ -102,10 +107,14 @@ export default function App() {
       : `${Math.floor(minutes)}:${seconds}`;
   }
 
+  // Hiển thị danh sách các đoạn ghi âm.
   function getRecordingLines() {
     return recordings.map((recordingLine, index) => {
       return (
-        <View key={index} className="mb-4 flex w-full flex-row items-center justify-between">
+        <View
+          key={index}
+          className="mb-4 flex w-full flex-row items-center justify-between"
+        >
           <Text>
             Recording #{index + 1} | {recordingLine.duration}
           </Text>
@@ -117,28 +126,34 @@ export default function App() {
     });
   }
 
+  // Xóa toàn bộ danh sách ghi âm
   function clearRecordings() {
     setRecordings([]);
   }
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="w-full items-center justify-center bg-white px-8 dark:bg-black">
+      <View className="w-full items-center justify-center bg-white px-6 dark:bg-black">
+        <Text className="text-2xl font-bold my-2"> Play Sound/Audio</Text>
         {/* Hiển thị danh sách âm thanh */}
         <View className="w-full">
-          <Text className="text-2xl font-bold"> Play Sound/Audio</Text>
           {audioList.map((item, index) => (
-            <View key={index} className="mb-4 flex w-full flex-row items-center justify-between">
+            <View
+              key={index}
+              className="mb-4 flex w-full flex-row items-center justify-between"
+            >
               <Text>{item.title}</Text>
-              <Button onPress={() => toggleSound(item.url, item.isRequire, index)}>
-                <Text>{playingTrack === index ? 'Stop' : 'Play'}</Text>
+              <Button
+                onPress={() => toggleSound(item.url, item.isRequire, index)}
+              >
+                <Text>{playingTrack === index ? "Stop" : "Play"}</Text>
               </Button>
             </View>
           ))}
         </View>
 
+        <Text className="text-2xl font-bold my-2 text-center"> Play Recording</Text>
         <View className="mt-8 w-full">
-          <Text className="text-2xl font-bold"> Play Recording</Text>
           <View className="mb-4 flex w-full items-end justify-end">
             {recordings.length > 0 && (
               <Button variant="destructive" onPress={clearRecordings}>
@@ -152,7 +167,7 @@ export default function App() {
 
           {getRecordingLines()}
           <Button onPress={recording ? stopRecording : startRecording}>
-            <Text>{recording ? '... Stop Recording' : 'Start Recording'}</Text>
+            <Text>{recording ? "... Stop Recording" : "Start Recording"}</Text>
           </Button>
         </View>
       </View>
