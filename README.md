@@ -1,50 +1,81 @@
-# Welcome to your Expo app 👋
+# IE307.P11.Group-6.Seminar
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An **Expo & React Native** application implementing features for **camera capture, QR code scanning, screenshot management, and audio/video playback** with speech-to-text and text-to-speech functionality.
 
-## Get started
+## Table of Contents
+1. [Features](#features)  
+2. [Prerequisites](#prerequisites)  
+3. [Installation](#installation)  
+4. [Usage](#usage)
 
-1. Install dependencies
+---
 
+## Features
+
+### Camera Features
+- **Capture Photos/Videos** using `expo-camera`.
+- **Scan QR Codes** using `expo-camera`.
+- **Screenshot** using `react-native-view-shot`
+- **Prevent Screenshots** for sensitive screens with `expo-screen-capture`.
+
+### Audio/Video Features
+- **Play Music and Audio** using `expo-av`.
+- **Play Video** using `expo-av`.
+- **Speech-to-Text** using `expo-speech` or Google API for natural speech input.
+- **Text-to-Speech** using `expo-speech` or Google API for natural speech output.
+
+---
+
+## Prerequisites
+1. **Node.js** (>=16.0.0) installed.  
+2. **Expo CLI** installed globally:
    ```bash
+   npm install -g expo-cli
+   ```
+3. Google Cloud API Key: Enable Speech-to-Text and Text-to-Speech APIs in the Google Cloud Console.
+
+---
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/NunNunIT/IE307.P11.Group6-Seminar.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd IE307.P11.Group6-Seminar
+   ```
+3. Install dependencies:
+   ```
    npm install
    ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
+4. Start the project:
+   ```
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+--- 
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Usage
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. Camera Features
+   - Photo/Video Capture
+  
+      Access the camera by navigating to the Camera screen.
+   - QR Code Scanning
 
-## Get a fresh project
+      Automatically detects and decodes QR codes in the camera view.
+   - Screenshot
 
-When you're ready, run:
+   - Prevent Screenshots
+     Protected screens prevent screenshots using expo-screen-capture.
 
-```bash
-npm run reset-project
-```
+2. Audio/Video Features
+   - Play Music/Sound
+   - Play Video
+   - Speech-to-Text
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+     Convert speech into text using expo-speech or Google API.
+   - Text-to-Speech
+   
+     Convert text into spoken words using expo-speech or Google API.
