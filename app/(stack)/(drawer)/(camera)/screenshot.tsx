@@ -42,21 +42,21 @@ export default function Index() {
           size="icon"
           onPress={() => setPhotoUri(null)}
           className="absolute left-8 top-1/2 -translate-y-1/2">
-          <ImageOff className="text-white" size={48} />
+          <ImageOff className="text-black dark:text-white" size={48} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onPress={screenshot}
           className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-          <Aperture className="text-white" size={48} />
+          <Aperture className="text-black dark:text-white" size={48} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onPress={() => router.push("/image-preview")}
           className="absolute top-1/2 -translate-y-1/2 right-8">
-          <GalleryThumbnails className="text-white" size={48} />
+          <GalleryThumbnails className="text-black dark:text-white" size={48} />
         </Button>
       </View>
     </SafeAreaView>
