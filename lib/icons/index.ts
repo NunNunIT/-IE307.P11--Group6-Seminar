@@ -1,20 +1,22 @@
 import {
-  Sun,
-  GalleryThumbnails,
-  Squircle,
-  SwitchCamera,
+  AlertCircle,
   Aperture,
-  Zap,
-  ZapOff,
   Camera,
-  ScanQrCode,
-  Fullscreen,
   CircleX,
   Construction,
-  AlertCircle,
+  Fullscreen,
+  GalleryThumbnails,
+  ImageOff,
+  ScanQrCode,
+  Squircle,
+  Sun,
+  SwitchCamera,
+  Zap,
+  ZapOff,
 } from 'lucide-react-native';
 
 import { iconWithClassName } from './iconWithClassName';
+
 iconWithClassName(Sun);
 iconWithClassName(GalleryThumbnails);
 iconWithClassName(Squircle);
@@ -28,6 +30,8 @@ iconWithClassName(Fullscreen);
 iconWithClassName(CircleX);
 iconWithClassName(Construction);
 iconWithClassName(AlertCircle);
+iconWithClassName(ImageOff);
+
 export {
   Sun,
   GalleryThumbnails,
@@ -42,4 +46,5 @@ export {
   CircleX,
   Construction,
   AlertCircle,
+  ImageOff
 };

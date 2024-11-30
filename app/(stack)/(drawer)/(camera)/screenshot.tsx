@@ -1,11 +1,12 @@
-import { useRef } from 'react';
-import { View, Image, SafeAreaView } from 'react-native';
-import ViewShot, { captureRef } from 'react-native-view-shot';
+import { Aperture, GalleryThumbnails, ImageOff } from '~/lib/icons';
+import { Image, SafeAreaView, View } from 'react-native';
 
-import { useCamera } from '~/components/CameraProvider';
 import { Button } from '~/components/ui/button';
 import { Text } from '~/components/ui/text';
-import { Aperture, CircleX } from '~/lib/icons';
+import { captureRef } from 'react-native-view-shot';
+import { router } from 'expo-router';
+import { useCamera } from '~/components/CameraProvider';
+import { useRef } from 'react';
 
 export default function Index() {
   const { photoUri, setPhotoUri } = useCamera();
@@ -26,8 +27,6 @@ export default function Index() {
       <View
         ref={imageRef}
         className="flex-1 border-2 border-red-500 p-4"
-        // style={{ flex: 1, padding: 16, borderWidth: 2, borderColor: 'red' }}
-        // options={{ format: 'png', quality: 1, result: 'data-uri' }}
         collapsable={false}>
         {photoUri ? (
           <Image className="flex-1" source={{ uri: photoUri }} />
@@ -37,20 +36,27 @@ export default function Index() {
           </View>
         )}
       </View>
-      <View className="absolute inset-x-0 bottom-16 h-24">
+      <View className="absolute inset-x-0 bottom-0 h-48">
         <Button
           variant="ghost"
           size="icon"
           onPress={() => setPhotoUri(null)}
-          className="absolute left-3.5 top-0">
-          <CircleX className="size-14 text-white" />
+          className="absolute left-8 top-1/2 -translate-y-1/2">
+          <ImageOff className="text-white" size={48} />
         </Button>
         <Button
           variant="ghost"
           size="icon"
           onPress={screenshot}
-          className="left-1/2 top-0 -translate-x-1/2 border-2 border-white">
-          <Aperture className="size-14 text-white" />
+          className="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
+          <Aperture className="text-white" size={48} />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onPress={() => router.push("/image-preview")}
+          className="absolute top-1/2 -translate-y-1/2 right-8">
+          <GalleryThumbnails className="text-white" size={48} />
         </Button>
       </View>
     </SafeAreaView>
